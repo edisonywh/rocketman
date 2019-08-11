@@ -5,8 +5,8 @@ module Rocketman
     include Singleton
 
     def initialize
-      worker_count = 5 # TODO: Refactor to get from config
-      latency = 3 # TODO: Refactor to get from config
+      worker_count = Rocketman.configuration.worker_count
+      latency = Rocketman.configuration.latency
 
       @latency = latency
       @jobs = Queue.new
