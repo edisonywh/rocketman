@@ -10,11 +10,9 @@ module Rocketman
     def notify_consumers
       consumers = Rocketman::Registry.instance.get_consumers_for(@event)
 
-      threads = consumers.reduce([]) do |memo, (consumer, action)|
-        memo << Thread.new { consumer.instance_exec(@payload, &action) }
+      consumers.each do |consumer, action|
+        consumer.instance_exec(@payload, &action)
       end
-
-      threads.each { |t| t.join } if @test == true
     end
   end
 end

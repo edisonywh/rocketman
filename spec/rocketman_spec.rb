@@ -1,8 +1,4 @@
 RSpec.describe Rocketman do
-  before(:each) do
-    reset_singleton
-  end
-
   describe "Producer" do
     before do
       Producer = Class.new
@@ -97,9 +93,5 @@ RSpec.describe Rocketman do
 
   def class_cleaner(*klasses)
     klasses.each { |klass| Object.send(:remove_const, "#{klass}") if defined? klass }
-  end
-
-  def reset_singleton
-    Singleton.__init__(Rocketman::Registry)
   end
 end
