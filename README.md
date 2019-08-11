@@ -27,7 +27,7 @@ Or install it yourself as:
 
 ## Usage
 
-Rocketman exposes two module, `Rocketman::Producer` and `Rocketman::Consumer`. They do exactly as what their name implies. All you need to do is `include` them into your code.
+Rocketman exposes two module, `Rocketman::Producer` and `Rocketman::Consumer`. They do exactly as what their name implies. All you need to do is `include Rocketman::Producer` and `extend Rocketman::Consumer` into your code.
 
 #### Producer
 Producer exposes one **instance** method to you: `:emit`. `:emit` takes in the event name and an optional payload and publishes it to the consumers. There's nothing more you need to do. The producer do not have to know who its consumers are.
@@ -47,7 +47,7 @@ Consumer exposes a **class** method, `:on_event`. `:on_event` takes in the event
 
 ```ruby
 class Consumer
-    include Rocketman::Consumer
+    extend Rocketman::Consumer
 
     on_event :hello do |payload|
         puts "I've received #{payload} here!"

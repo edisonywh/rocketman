@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "pry"
 require "rocketman"
 
 RSpec.configure do |config|

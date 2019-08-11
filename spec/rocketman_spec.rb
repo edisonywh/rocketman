@@ -29,7 +29,7 @@ RSpec.describe Rocketman do
 
       ConsumerOne = Class.new
       ConsumerOne.class_eval do
-        include Rocketman::Consumer
+        extend Rocketman::Consumer
 
         on_event :hello do
           acknowledged += 1
@@ -38,7 +38,7 @@ RSpec.describe Rocketman do
 
       ConsumerTwo = Class.new
       ConsumerTwo.class_eval do
-        include Rocketman::Consumer
+        extend Rocketman::Consumer
 
         on_event :hello do
           acknowledged += 1
@@ -57,7 +57,7 @@ RSpec.describe Rocketman do
       Consumer = Class.new
 
       Consumer.class_eval do
-        include Rocketman::Consumer
+        extend Rocketman::Consumer
 
         on_event :hello do
           nil
@@ -73,7 +73,7 @@ RSpec.describe Rocketman do
       acknowledged = 0
 
       Consumer.class_eval do
-        include Rocketman::Consumer
+        extend Rocketman::Consumer
 
         on_event :hello do
           acknowledged += 1
