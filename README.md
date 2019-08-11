@@ -42,6 +42,17 @@ class Producer
 end
 ```
 
+Note that Producer emit events with threads that run in a thread pool. The default number of worker is 5, and the workers default to checking the job with a 3 seconds interval. You can tweak it to your liking like so:
+
+```ruby
+# config/initializers/rocketman.rb
+
+Rocketman.configure do |config|
+  config.worker_count = 10 # defaults to 5
+  config.latency      = 1  # defaults to 3, unit is :seconds
+end
+```
+
 #### Consumer
 Consumer exposes a **class** method, `:on_event`. `:on_event` takes in the event name, and also an additional block, which gets executed whenever a message is received. If an additional `payload` is emitted along with the event, you can get access to it in the form of block argument.
 
