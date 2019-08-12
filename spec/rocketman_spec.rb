@@ -17,7 +17,7 @@ RSpec.describe Rocketman do
     end
 
     it 'should register event when emitting' do
-      expect { Producer.new.produce }.to change { Rocketman::Registry.instance.event_exists?(:hello) }.from(false).to(true)
+      expect { Producer.new.produce }.to change { Rocketman::Registry.event_exists?(:hello) }.from(false).to(true)
     end
 
     it 'should notify all downstream consumers' do
@@ -60,7 +60,7 @@ RSpec.describe Rocketman do
         end
       end
 
-      expect(Rocketman::Registry.instance.get_consumers_for(:hello).keys).to eq [Consumer]
+      expect(Rocketman::Registry.get_consumers_for(:hello).keys).to include Consumer
     end
 
     it "should run on_event when event is emitted" do
