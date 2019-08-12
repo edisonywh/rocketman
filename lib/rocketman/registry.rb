@@ -8,6 +8,9 @@ module Rocketman
                when :memory
                  require 'rocketman/adapters/memory'
                  Rocketman::Adapter::Memory.instance
+               when :redis
+                 require 'rocketman/adapters/redis'
+                 Rocketman::Adapter::Redis.instance
                end
 
     def_delegators :@backend, :register_consumer, :register_event, :get_consumers_for, :event_exists?

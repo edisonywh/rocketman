@@ -89,6 +89,57 @@ RSpec.describe Rocketman do
     end
   end
 
+  # describe "Adapters" do
+  #   before do
+  #     Rocketman.configuration.backend = :redis
+  #   end
+  #   describe "Redis" do
+  #     before do
+  #       Producer = Class.new
+
+  #       Producer.class_eval do
+  #         include Rocketman::Producer
+
+  #         def produce
+  #           emit :hello, test: true
+  #         end
+  #       end
+  #     end
+
+  #     after do
+  #       class_cleaner(Producer)
+  #     end
+
+  #     it 'should register event when emitting' do
+  #       expect { Producer.new.produce }.to change { Rocketman::Registry.event_exists?(:hello) }.from(false).to(true)
+  #     end
+
+  #     it 'should notify all downstream consumers' do
+  #       acknowledged = 0
+
+  #       ConsumerOne = Class.new
+  #       ConsumerOne.class_eval do
+  #         extend Rocketman::Consumer
+
+  #         on_event :hello do
+  #           acknowledged += 1
+  #         end
+  #       end
+
+  #       ConsumerTwo = Class.new
+  #       ConsumerTwo.class_eval do
+  #         extend Rocketman::Consumer
+
+  #         on_event :hello do
+  #           acknowledged += 1
+  #         end
+  #       end
+
+  #       expect { Producer.new.produce }.to change { acknowledged }.from(0).to(2)
+  #     end
+  #   end
+  # end
+
   private
 
   def class_cleaner(*klasses)
