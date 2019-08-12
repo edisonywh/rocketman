@@ -13,7 +13,8 @@ module Rocketman
     def initialize
       @worker_count = 5
       @latency = 3
-      @backend = :memory
+      # @backend = :memory
+      @backend = :redis
     end
   end
 end
