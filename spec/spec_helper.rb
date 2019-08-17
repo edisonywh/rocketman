@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "pry"
 require "rocketman"
+require "redis"
 require "support/test_pool"
 
 RSpec.configure do |config|

@@ -13,6 +13,7 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     rake (10.5.0)
+    redis (4.1.2)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -34,6 +35,7 @@ DEPENDENCIES
   bundler (~> 1.17)
   pry
   rake (~> 10.0)
+  redis
   rocketman!
   rspec (~> 3.0)
 

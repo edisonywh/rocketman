@@ -3,7 +3,6 @@ module Rocketman
     def initialize(event, payload)
       @event = event
       @payload = payload
-      @test = payload.fetch(:test, false)
       Rocketman::Registry.register_event(event)
     end
 
