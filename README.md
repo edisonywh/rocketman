@@ -34,11 +34,11 @@ Producer exposes one **instance** method to you: `:emit`. `:emit` takes in the e
 
 ```ruby
 class Producer
-    include Rocketman::Producer
+  include Rocketman::Producer
 
-    def hello_world
-        emit :hello, payload: {"one" => 1, "two" => 2}
-    end
+  def hello_world
+    emit :hello, payload: {"one" => 1, "two" => 2}
+  end
 end
 ```
 
@@ -58,24 +58,58 @@ Consumer exposes a **class** method, `:on_event`. `:on_event` takes in the event
 
 ```ruby
 class Consumer
-    extend Rocketman::Consumer
+  extend Rocketman::Consumer
 
-    on_event :hello do |payload|
-        puts "I've received #{payload} here!"
-        # => I've received {:payload=>{"one"=>1, "two"=>2}} here!
-    end
+  on_event :hello do |payload|
+    puts "I've received #{payload} here!"
+    # => I've received {:payload=>{"one"=>1, "two"=>2}} here!
+  end
 end
 ```
 
 Simple isn't it?
 
+##### Consume events from external services
+
+If you want to also consume events from external services, you're in luck (well, as long as you're using `Redis` anyway..)
+
+Rocketman exposes a `Rocketman::Bridge`, which allows your Ruby code to start consuming events from Redis, **without any changes to your consumers**.
+
+This works because `Bridge` will listen for events from those services on behalf of you, and then it'll push those events onto the internal `Registry`.
+
+**This pattern is powerful because this means your consumers do not have to know where the events are coming from, as long as they're registed onto `Registry`.**
+
+Right now, only `Redis` is supported. Assuming you have the `redis` gem installed, this is how you register a bridge.
+
+```ruby
+Rocketman::Bridge.construct(Redis.new)
+```
+
+That's all! Rocketman will translate the following
+
+```
+redis-cli> PUBLISH hello payload
+```
+
+to something understandable by your consumer, so a consumer only has to do:
+
+```ruby
+on_event :hello do |payload|
+  puts payload
+end
+```
+
+Notice how it behaves exactly the same as if the events did not come from Redis? :)
+
+**NOTE**: You should always pass in a **new, dedicated** connection to `Redis` to `Bridge#construct`. This is because `redis.subscribe` will hog the whole Redis connection (not just Ruby process), so `Bridge` expects a dedicated connection for itself.
+
 ## Roadmap
 
 Right now events are using a `fire-and-forget` mechanism, which is designed to not cause issue to producers. However, this also means that if a consumer fail to consume an event, it'll be lost forever. **Next thing on the roadmap is look into a retry strategy + persistence mechanism.**
 
-Events are also stored in memory in `Rocketman::Registry`, which has the same problem as above. **Something to think about is to perhaps move it onto a persistent storage, like Redis for example.**
+Emitted events are also stored in memory in `Rocketman::Pool`, which means that there's a chance that you'll lose all emitted jobs. **Something to think about is to perhaps move the emitted events/job queue onto a persistent storage, like Redis for example.**
 
-The interface could also probably be better defined, as one of the goal of Rocketman is to be the stepping stone before migrating off to a real, proper message queue/pub-sub mechanism like Kafka. **I want to revisit and think about how can we make that transition more seamless?**
+The interface could also probably be better defined, as one of the goal of Rocketman is to be the stepping stone before migrating off to a real, proper message queue/pub-sub mechanism like Kafka. **I want to revisit and think about how can we make that transition more seamless.**
 
 ## Development
 
