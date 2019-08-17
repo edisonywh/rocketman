@@ -10,6 +10,6 @@ module Rocketman
                  Rocketman::Adapter::Memory.instance
                end
 
-    def_delegators :@backend, :register_consumer, :register_event, :get_consumers_for, :event_exists?
+    def_delegators :@backend, :register_consumer, :register_event, :get_consumers_for, :get_events, :event_exists?
   end
 end

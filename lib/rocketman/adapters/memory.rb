@@ -21,6 +21,10 @@ module Rocketman
         @registry[event][consumer] = action
       end
 
+      def get_events
+        @registry.keys
+      end
+
       def get_consumers_for(event)
         @registry[event]
       end
