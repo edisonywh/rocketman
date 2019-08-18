@@ -1,15 +1,42 @@
+require 'singleton'
 require 'forwardable'
 
 module Rocketman
   class Registry
-    extend SingleForwardable
+    include Singleton
 
-    @backend = case Rocketman.configuration.backend
-               when :memory
-                 require 'rocketman/adapters/memory'
-                 Rocketman::Adapter::Memory.instance
-               end
+    def initialize
+      @registry = {}
+    end
 
-    def_delegators :@backend, :register_consumer, :register_event, :get_consumers_for, :get_events, :event_exists?
+    def register_event(event)
+      if @registry[event]
+        return @registry[event]
+      else
+        @registry[event] = {}
+      end
+    end
+
+    def register_consumer(event, consumer, action)
+      @registry[event][consumer] = action
+    end
+
+    def get_events
+      @registry.keys
+    end
+
+    def get_consumers_for(event)
+      @registry[event]
+    end
+
+    def event_exists?(event)
+      !@registry[event].nil?
+    end
+
+    # This is to help hide the Singleton interface from the rest of the code
+    class << self
+      extend Forwardable
+      def_delegators :instance, *Rocketman::Registry.instance_methods(false)
+    end
   end
 end
