@@ -75,7 +75,7 @@ require 'rocketman/relay/redis' # This is not required by default, so you need t
 Rocketman::Relay::Redis.new.start(Redis.new)
 ```
 
-> **NOTE**: You should always pass in a **new, dedicated** connection to `Redis` to `Bridge#construct`. This is because `redis.psubscribe` will hog the whole Redis connection (not just Ruby process), so `Relay` expects a dedicated connection for itself.
+> **NOTE**: You should always pass in a **new, dedicated** connection to `Redis` to the Redis relay. This is because `redis.psubscribe` will hog the whole Redis connection (not just Ruby process), so `Relay` expects a dedicated connection for itself.
 
 That's it, the `Redis` relay service will now listen for events from external services on behalf of you, and then it'll push those events onto the internal `Registry`.
 
