@@ -138,6 +138,12 @@ Moving onto a event-driven architecture is not an easy task - your team has to a
 
 So what Rocketman offers you is that you can start writing your dream-state event-driven code **today**, and when the time comes and your team has the capacity to move to a different message bus, then it should be a minimal change.
 
+## Architecture
+
+Here's a very crude drawing of the architecture of Rocketman
+
+![erd](./erd.png)
+
 ## Roadmap
 
 Right now events are using a `fire-and-forget` mechanism, which is designed to not cause issue to producers. However, this also means that if a consumer fail to consume an event, it'll be lost forever. **Next thing on the roadmap is look into a retry strategy + persistence mechanism.**
