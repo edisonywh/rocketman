@@ -62,23 +62,24 @@ end
 
 Simple isn't it?
 
-#### Consume events from external services
+#### Consume events from external services (Relays)
 
-If you want to also consume events from external services, you're in luck (well, as long as you're using `Redis` anyway..)
+If you want to also consume events from external services, you can do that too.
 
-Rocketman exposes a `Rocketman::Bridge`, which allows your Ruby code to start consuming events from Redis, **without any changes to your consumers**.
+Rocketman has the concept of a `Relay`. The cool thing is, `Relay`s are just `Producer`s that understand how to relay messages from external services (like `Redis`) into Rocketman events.
 
-This works because `Bridge` will listen for events from those services on behalf of you, and then it'll push those events onto the internal `Registry`.
-
-**This pattern is powerful because this means your consumers do not have to know where the events are coming from, as long as they're registed onto `Registry`.**
-
-Right now, only `Redis` is supported. Assuming you have the `redis` gem installed, this is how you register a bridge.
+Rocketman ships with a `Redis` relay, which you can use it like so (assuming you have Redis installed):
 
 ```ruby
-Rocketman::Bridge.construct(Redis.new)
+require 'rocketman/relay/redis' # This is not required by default, so you need to explicitly require it.
+Rocketman::Relay::Redis.new.start(Redis.new)
 ```
 
-That's all! Rocketman will translate the following
+> **NOTE**: You should always pass in a **new, dedicated** connection to `Redis` to `Bridge#construct`. This is because `redis.psubscribe` will hog the whole Redis connection (not just Ruby process), so `Relay` expects a dedicated connection for itself.
+
+That's it, the `Redis` relay service will now listen for events from external services on behalf of you, and then it'll push those events onto the internal `Registry`.
+
+It'll translate the following:
 
 ```
 redis-cli> PUBLISH hello payload
@@ -94,7 +95,9 @@ end
 
 Notice how it behaves exactly the same as if the events did not come from Redis :)
 
-**NOTE**: You should always pass in a **new, dedicated** connection to `Redis` to `Bridge#construct`. This is because `redis.subscribe` will hog the whole Redis connection (not just Ruby process), so `Bridge` expects a dedicated connection for itself.
+**This pattern is powerful because this means your consumers do not have to know where the events are coming from, as long as they're registed onto `Registry`.**
+
+Right now, only `Redis` is supported, but it is extremely easy to add a `Relay` yourself since it's just a `Producer`. Checkout the implementation of `rocketman/relay/redis` for reference, upstream contributions for services are very welcomed too.
 
 ## Persisting emitted events
 

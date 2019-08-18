@@ -7,7 +7,7 @@ RSpec.describe Rocketman do
         include Rocketman::Producer
 
         def produce
-          emit :hello, test: true
+          emit :hello
         end
       end
     end
@@ -87,36 +87,5 @@ RSpec.describe Rocketman do
 
       expect { Producer.new.produce }.to change { acknowledged }.from(0).to(1)
     end
-
-    describe "Redis" do
-      before do
-        Rocketman::Bridge.construct(Redis.new) # Pass in a dedicated connection
-      end
-
-      context "when events are emitted from Redis" do
-        it "should notify consumers" do
-          Consumer = Class.new
-
-          acknowledged = 0
-
-          Consumer.class_eval do
-            extend Rocketman::Consumer
-
-            on_event :hello do
-              acknowledged += 1
-            end
-          end
-
-          # BUG: Intermittent failure here due to race condition. This is because publish is an async request, it does not guarantee the event gets called in time
-          expect { Redis.new.publish("hello", {}.to_json); sleep 1 }.to change { acknowledged }.from(0).to(1)
-        end
-      end
-    end
-  end
-
-  private
-
-  def class_cleaner(*klasses)
-    klasses.each { |klass| Object.send(:remove_const, "#{klass}") if defined? klass }
   end
 end

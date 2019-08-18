@@ -25,7 +25,7 @@ module Rocketman
     private
 
     def spawn_worker
-      Thread.abort_on_exception = true if Rocketman.configuration.debug
+      Thread.abort_on_exception if Rocketman.configuration.debug
 
       Thread.new do
         loop do

@@ -19,3 +19,11 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+Rocketman.configure do |config|
+  config.debug = true
+end
+
+def class_cleaner(*klasses)
+  klasses.each { |klass| Object.send(:remove_const, "#{klass}") if defined? klass }
+end
