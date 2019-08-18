@@ -8,12 +8,13 @@ module Rocketman
   end
 
   class Configuration
-    attr_accessor :worker_count, :latency, :backend
+    attr_accessor :worker_count, :latency, :storage, :debug
 
     def initialize
       @worker_count = 5
       @latency = 3
-      @backend = :memory
+      @storage= nil
+      @debug = false
     end
   end
 end

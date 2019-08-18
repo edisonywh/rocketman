@@ -4,8 +4,12 @@ module Rocketman
       self
     end
 
-    def self.schedule(&job)
-      job.call
+    def self.jobs
+      self
+    end
+
+    def self.schedule(job)
+      job.notify_consumers
     end
   end
 end

@@ -9,6 +9,8 @@ module Rocketman
     def notify_consumers
       consumers = Rocketman::Registry.get_consumers_for(@event)
 
+      return if consumers.nil? || consumers.empty?
+
       consumers.each do |consumer, action|
         consumer.instance_exec(@payload, &action)
       end
