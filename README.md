@@ -5,7 +5,7 @@
 
 Rocketman is a gem that introduces Pub-Sub mechanism within your Ruby code.
 
-The main goal of Rocketman is not to replace proper message buses like Redis PubSub/Kafka, but rather be a stepping stone. You can read more about the rationale behind the project down below.
+The main goal of Rocketman is not to replace proper message buses like Redis PubSub/Kafka, but rather be a stepping stone. You can read more about the [rationale behind the project](https://github.com/edisonywh/rocketman#why-use-rocketman-rather-than-a-proper-message-bus-eg-redis-pubsubkafka) down below.
 
 As with all Pub-Sub mechanism, this greatly decouples your upstream producer and downstream consumer, allowing for scalability, and easier refactor when you decide to move Pub-Sub to a separate service.
 
