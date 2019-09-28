@@ -5,5 +5,10 @@ module Rocketman
       Rocketman::Registry.register_event(event)
       Rocketman::Registry.register_consumer(event, consumer, action)
     end
+
+    def emit(event, payload = {})
+      event = Rocketman::Event.new(event.to_sym, payload)
+      Rocketman::Pool.instance.jobs.schedule(event)
+    end
   end
 end

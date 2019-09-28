@@ -88,4 +88,32 @@ RSpec.describe Rocketman do
       expect { Producer.new.produce }.to change { acknowledged }.from(0).to(1)
     end
   end
+
+  describe "Hybrid (Producer + Consumer)" do
+    it 'should be able to emit and receive messages' do
+      Hybrid = Class.new
+
+      acknowledged = 0
+
+      Hybrid.class_eval do
+        include Rocketman::Producer
+        extend Rocketman::Consumer
+
+        on_event :hello do
+          acknowledged += 1
+          emit :ahoy
+        end
+
+        on_event :ahoy do
+           acknowledged += 1
+        end
+
+        def produce
+          emit :hello
+        end
+      end
+
+      expect { Hybrid.new.produce }.to change { acknowledged }.from(0).to(2)
+    end
+  end
 end
